@@ -1,13 +1,15 @@
-import mysql.connector as sql
+import mysql.connector
 import pandas as pd
-db=sql.connect(
-    host="localhost",
-    user="root",
-    passwd=#pass_here,
-    #database="crs"
-    )
 
-mycursor=db.cursor()
+db = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  passwd="pass",
+  database="crs"
+   )
+
+mycursor = db.cursor()
+mycursor.execute("select * from customer")
 '''
 mycursor.execute('create database if not exists crs;')
 db.commit()
@@ -79,7 +81,7 @@ val3 = [
   ('T002','LIABILITY PROTECTION', 'Covers damage done to others',8),
   ('T003','PERSONAL ACCIDENT INSURANCE', 'Covers medical costs for driver and passengers',10),
   ('T004','PERSONAL EFFECTS COVERAGE', 'Covers theft of personal belongings',9)]
-
 mycursor.executemany(ins3,val3)
 db.commit()
 '''
+
