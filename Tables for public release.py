@@ -1,12 +1,14 @@
 import mysql.connector as sql
-
+import pandas as pd
 db=sql.connect(
     host="localhost",
     user="root",
-    passwd='-------------#pass_u_put----------------')
+    passwd=#pass_here,
+    #database="crs"
+    )
 
 mycursor=db.cursor()
-
+'''
 mycursor.execute('create database if not exists crs;')
 db.commit()
 
@@ -80,7 +82,4 @@ val3 = [
 
 mycursor.executemany(ins3,val3)
 db.commit()
-
-
- 
-
+'''

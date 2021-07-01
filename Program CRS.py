@@ -4,7 +4,7 @@ import pandas as pd
 db=sql.connect(
     host="localhost",
     user="root",
-    passwd='root',
+    passwd="enter pass",
     database='crs')
 mycursor=db.cursor()
 
@@ -40,10 +40,11 @@ def staff():
                     #shows customer table
                     clear()
                     logo()
-                    mycursor.execute("SELECT * FROM customer")
-                    cus=mycursor.fetchall()
-                    for x in cus:
-                        print(x) 
+                    mycursor.execute("SELECT * FROM customer;")
+                    data = mycursor.fetchall()
+                    results = pd.DataFrame(data, columns=["dl", "name", "number", "adress", "null"])
+                    result = results.to_string(index=False)
+                    print(result)
                     con=input('\nPress y to return back to menu or press any key to log out:  ')
                     if con=='y':
                         continue
