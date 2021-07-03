@@ -19,9 +19,9 @@ mycursor = db.cursor()
 #function creations
 
 #creates empty space
-def clear():
-  for _ in range(50):
-     print()
+def clear():    
+    for _ in range(50):
+        print()
     
 #logo print function
 def logo():
@@ -74,32 +74,87 @@ def showBooking():
     head = ["BOOKING ID", "FROM DT", "RET. DT", "AMOUNT", "REG. NO", "Driver's license", "MEM_ID", "ACT_RET_DT"]
     df(data,head)
 
+#Add/Delete a car
+def CarModify():
+    print('1. Add a car\n2. Delete a car\n')
+    UserInput=input('\n Enter choice: ')
+    if UserInput=='1':
+        reg=input('Enter registration number: ')
+        mdl=input('Enter model name: ')
+        mke=input('Enter make: ')
+        cc=input('Enter car category: ')
+        av=input('Enter car availability: ')
+        cpd=int(input('Enter cost per day in KWD: '))
+        list1=[reg,mdl,mke,cc,av,cpd]
+        lis=[reg]
+        comm='select * from car where reg_no=%s'
+        coIns='insert into car values(%s,%s,%s,%s,%s,%s)'
+        mycursor.execute(comm,lis)
+        mycursor.fetchall()
+        count=mycursor.rowcount
+        if count==1:
+            print('\nCar already exists!\n')
+        else:
+            mycursor.execute(coIns,list1)
+            db.commit()
+            print('\nCar has been added successfully\n') 
+            
+        
+    elif UserInput=='2':
+        reg=input('Enter Registration number of the car to be deleted: ')
+        lis=[reg]
+        comm='select * from car where reg_no=%s'
+        mycursor.execute(comm,lis)
+        mycursor.fetchall()
+        count=mycursor.rowcount
+        if count==1:
+            Del='Delete from car where reg_no=%s'
+            mycursor.execute(Del,lis)
+            db.commit()
+            print('\nCar deleted successfully\n')
+        else:
+            print('\nCar does not exist!\n') 
+    
+    else:
+        print('\nWrong input please try again.\n')
+        
 #staff View input statements
 def ViewStaff(value):
     if value == "1":
         clear()
         logo()
         showCustomer()
+        
     elif value == "2":
         clear()
         logo()
         showVehicles()
+        
     elif value == "3":
         clear()
         logo()
         showBills()
+        
     elif value == "4":
         clear()
         logo()
         showBooking()
+        
     elif value == "5":
         clear()
         logo()
-        pass
+        CarModify()
+        
     elif value == "6":
         clear()
         logo()
         pass
+    
+    elif value == "7":
+        clear()
+        logo()
+        pass
+    
     else:
         print("\nWrong Entry")
 
@@ -121,7 +176,7 @@ def staff():
                 logoPrint()
                 print('\n\n\t\tWelcome Staff\n')
                 print("\nChoose options below:\n1. View Customers\n2. View vehicles\n3. View billing"
-                    "\n4. View Booking Details\n\n5. Register returned car\n6. Generate Billing invoice" )
+                    "\n4. View Booking Details\n5. Add/Delete a vehicle to/from the fleet \n\n6. Register returned car\n7. Generate Billing invoice" )
                 value = input('\n Enter choice: ')
                 ViewStaff(value)
                 Continue = input('\nPress y to return back to menu or press any key to log out:  ')
