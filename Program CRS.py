@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="pass",
+    passwd="root",
     database='crs'
     )
 
@@ -28,7 +28,8 @@ def logo():
     print('         ╔═╗╔═╗╦═╗╦╔═  ╦  ╔═╗╔╗╔╔═╗  ')
     print('         ╠═╝╠═╣╠╦╝╠╩╗  ║  ╠═╣║║║║╣   ')
     print('         ╩  ╩ ╩╩╚═╩ ╩  ╩═╝╩ ╩╝╚╝╚═╝  ')
-    print('             CAR RENTAL COMPANY               ')
+    print('             CAR RENTAL COMPANY               \n')
+    print('      "Synonymous with style and luxury"   \n')
 
 #combining the above 2 functions
 def logoPrint():
@@ -43,11 +44,13 @@ def df(data, col):
 
 
 #visual functions
+
 #customers
 def showCustomer():
+    print()
     mycursor.execute("SELECT * FROM customer;")
     data = mycursor.fetchall()
-    head = ["Diver's licence", "Full Name", "Phone Number", "Address", " MEM_ID"]
+    head = ["Driver's licence", "Full Name", "Phone Number", "Address", " MEM_ID"]
     df(data,head)
 
 #Vehicles
@@ -68,7 +71,7 @@ def showBills():
 def showBooking():
     mycursor.execute("SELECT * FROM booking_details;")
     data = mycursor.fetchall()
-    head = ["BOOKING ID", "FROM DT", "RET_DT", "AMOUNT", "REG_NO", "Diver's licence", "MEM_ID", "ACT_RET_DT"]
+    head = ["BOOKING ID", "FROM DT", "RET. DT", "AMOUNT", "REG. NO", "Driver's license", "MEM_ID", "ACT_RET_DT"]
     df(data,head)
 
 #staff View input statements
@@ -98,13 +101,13 @@ def ViewStaff(value):
         logo()
         pass
     else:
-        print("Wrong Entry")
+        print("\nWrong Entry")
 
 #Main Menu
 def MainMenu():
     logoPrint()
-    print("\n\n\n Choose the following: ")
-    print("\t1.Staff\n\t2.Customers\n\t3.Close")
+    print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
+    print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
 
 #staff 
 def staff():
@@ -118,7 +121,7 @@ def staff():
                 logoPrint()
                 print('\n\n\t\tWelcome Staff\n')
                 print("\nChoose options below:\n1. View Customers\n2. View vehicles\n3. View billing"
-                    "\n4. View Booking Details\n5. Register returned car\n6. Generate Billing invoice" )
+                    "\n4. View Booking Details\n\n5. Register returned car\n6. Generate Billing invoice" )
                 value = input('\n Enter choice: ')
                 ViewStaff(value)
                 Continue = input('\nPress y to return back to menu or press any key to log out:  ')
@@ -127,23 +130,26 @@ def staff():
                 else:
                     break      
         else:
-            print('\nIncorrect password.\n')
+            print('\nIncorrect password.\nPress any key to try again.\n')
+            er=input()
     else:
-        print('\nunknown credentials.\nPlease Try Again.\n')      
+        print('\nUnknown credentials.\nPress any key to try again.\n')
+        er=input()
 
 #Main Loop
 def Main():
     while True:
         MainMenu()
         Num = input(": ")
-        if Num == "1":
+        if Num == "0":
             staff()
+        elif Num == "1":
+            pass
         elif Num == "2":
             pass
-        elif Num == "3":
-            break
         else:
-            print("ERROR WRONG ENTRY")
+            print("\t ERROR! \n\tWRONG ENTRY\n\n press any key to try again")
+            er=input()
 
 
 #Main
