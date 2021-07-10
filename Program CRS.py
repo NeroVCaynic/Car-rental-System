@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="root",
+    passwd="sheikkhokon1435",
     database='crs'
     )
 
@@ -77,22 +77,22 @@ def showBooking():
 #Add/Delete a car
 def CarModify():
     print('1. Add a car\n2. Delete a car\n')
-    UserInput=input('\n Enter choice: ')
-    if UserInput=='1':
-        reg=input('Enter registration number: ')
-        mdl=input('Enter model name: ')
-        mke=input('Enter make: ')
-        cc=input('Enter car category: ')
-        av=input('Enter car availability: ')
-        cpd=int(input('Enter cost per day in KWD: '))
-        list1=[reg,mdl,mke,cc,av,cpd]
-        lis=[reg]
-        comm='select * from car where reg_no=%s'
-        coIns='insert into car values(%s,%s,%s,%s,%s,%s)'
+    UserInput = input('\n Enter choice: ')
+    if UserInput == '1':
+        reg = input('Enter registration number: ')
+        mdl = input('Enter model name: ')
+        mke = input('Enter make: ')
+        cc = input('Enter car category: ')
+        av = input('Enter car availability: ')
+        cpd = int(input('Enter cost per day in KWD: '))
+        list1 = [reg,mdl,mke,cc,av,cpd]
+        lis = [reg]
+        comm = 'select * from car where reg_no=%s'
+        coIns = 'insert into car values(%s,%s,%s,%s,%s,%s)'
         mycursor.execute(comm,lis)
         mycursor.fetchall()
-        count=mycursor.rowcount
-        if count==1:
+        count = mycursor.rowcount
+        if count >= 1:
             print('\nCar already exists!\n')
         else:
             mycursor.execute(coIns,list1)
@@ -164,6 +164,35 @@ def MainMenu():
     print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
     print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
 
+#CustomerSearch
+def CustomerSearch():
+    name = input("Type your name: ")
+    mycursor.execute("SELECT * FROM customer WHERE FULL_NAME LIKE CONCAT('%', %s, '%')",(name,))
+    result = mycursor.fetchall()
+    count = mycursor.rowcount
+    if count == 1:
+        print(result,"\n")
+    elif count > 1:
+        print("there are more than one Record avaliable")
+    else:
+        print("No Records avaliable")
+    input("press enter to try again")
+
+#booking return function
+def bookingReturn():
+    RegNum = input("Enter Registration NO.: ")
+    mycursor.execute("SELECT * FROM booking_details WHERE REG_NO = %s;",(RegNum,))
+    result = mycursor.fetchall()
+    row = mycursor.rowcount
+    if row == 1:
+        returnDate = input("Enter return date(YYYY/MM/DD): ")
+        print(result)
+        print("Changed")
+        mycursor.execute("UPDATE booking_details SET ACT_RET_DT = %s WHERE REG_NO = %s ",(returnDate, RegNum,))
+        mycursor.execute("UPDATE car SET AVAILABILITY = 'y' WHERE REG_NO = %s ",(RegNum,))
+        print(mycursor.fetch())
+    else:
+        print("ERROR")
 #staff 
 def staff():
     logoPrint()
@@ -185,11 +214,11 @@ def staff():
                 else:
                     break      
         else:
-            print('\nIncorrect password.\nPress any key to try again.\n')
-            er=input()
+            print('\nIncorrect password.\nPress enter to try again.\n')
+            input()
     else:
-        print('\nUnknown credentials.\nPress any key to try again.\n')
-        er=input()
+        print('\nUnknown credentials.\nPress enter to try again.\n')
+        input()
 
 #Main Loop
 def Main():
@@ -199,12 +228,13 @@ def Main():
         if Num == "0":
             staff()
         elif Num == "1":
+            #CustomerSearch()
             pass
         elif Num == "2":
             pass
         else:
-            print("\t ERROR! \n\tWRONG ENTRY\n\n press any key to try again")
-            er=input()
+            print("\t ERROR! \n\tWRONG ENTRY\n\n press enter to try again")
+            input()
 
 
 #Main

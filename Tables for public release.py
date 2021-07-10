@@ -4,12 +4,11 @@ import pandas as pd
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="pass",
+  passwd="sheikkhokon1435",
   database="crs"
    )
 
 mycursor = db.cursor()
-mycursor.execute("select * from customer")
 '''
 mycursor.execute('create database if not exists crs;')
 db.commit()
@@ -84,4 +83,6 @@ val3 = [
 mycursor.executemany(ins3,val3)
 db.commit()
 '''
-
+mycursor.execute("select * from car")
+data = mycursor.fetchall()
+print(pd.DataFrame(data,index=None,columns=["DL", "Model Make", "Brand", "type", "Avaliable", "null"]))
