@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
@@ -148,7 +148,7 @@ def ViewStaff(value):
     elif value == "6":
         clear()
         logo()
-        pass
+        BookingReturn()
     
     elif value == "7":
         clear()
@@ -165,6 +165,8 @@ def MainMenu():
     print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
 
 #CustomerSearch
+    #---------->Are you fucking retarded searching a customer by their full name??? use DL instead. <----------
+    
 def CustomerSearch():
     name = input("Type your name: ")
     mycursor.execute("SELECT * FROM customer WHERE FULL_NAME LIKE CONCAT('%', %s, '%')",(name,))
@@ -179,20 +181,45 @@ def CustomerSearch():
     input("press enter to try again")
 
 #booking return function
-def bookingReturn():
-    RegNum = input("Enter Registration NO.: ")
-    mycursor.execute("SELECT * FROM booking_details WHERE REG_NO = %s;",(RegNum,))
+def BookingReturn():
+    Book = input("Enter Booking ID: ")
+    mycursor.execute("SELECT * FROM booking_details WHERE BOOKING_ID = %s;",(Book,))
     result = mycursor.fetchall()
     row = mycursor.rowcount
     if row == 1:
-        returnDate = input("Enter return date(YYYY/MM/DD): ")
-        print(result)
-        print("Changed")
-        mycursor.execute("UPDATE booking_details SET ACT_RET_DT = %s WHERE REG_NO = %s ",(returnDate, RegNum,))
-        mycursor.execute("UPDATE car SET AVAILABILITY = 'y' WHERE REG_NO = %s ",(RegNum,))
-        print(mycursor.fetch())
+        returnDate = input("Enter return date (YYYY-MM-DD): ")
+        mycursor.execute('Select reg_no from booking_details where booking_id= %s',(Book,))
+        regno1=mycursor.fetchall()
+        regno2=regno1[0]
+        regno=regno2[0]
+        mycursor.execute("UPDATE booking_details SET ACT_RET_DT = %s WHERE BOOKING_ID = %s ",(returnDate, Book,))
+        mycursor.execute("UPDATE car SET AVAILABILITY = 'y' WHERE reg_no = %s ",(regno,))
+        mycursor.execute('SELECT COST_PER_DAY_IN_KWD FROM car WHERE reg_no = %s',(regno,))
+        rate1=mycursor.fetchall()
+        #bringing out the value from the list
+        rate2=rate1[0]
+        rate=rate2[0]
+        mycursor.execute('SELECT ACT_RET_DT-FROM_DT from booking_details WHERE BOOKING_ID= %s',(Book,))
+        TotDur1=mycursor.fetchall()
+        TotDur2=TotDur1[0]
+        TotDur=TotDur2[0]
+        if TotDur>=1:
+            mycursor.execute('SELECT ACT_RET_DT-RET_DT from booking_details WHERE BOOKING_ID= %s',(Book,))
+            late1=mycursor.fetchall()
+            late2=late1[0]
+            late=late2[0]
+            #final amount with late fees which is 10% of rate
+            amount=rate*TotDur+(10/100*rate*late)
+            mycursor.execute("UPDATE booking_details SET AMOUNT = %s where BOOKING_ID= %s ",(amount, Book,))
+            db.commit()
+            print('\n\t Operation completed successfully!\n')
+        else:
+            print('\n\t Something went wrong!\n Please check the return date and try again.\n')
+                            
     else:
-        print("ERROR")
+        print("\n\t ERROR! \n\tCar doesn't exist!\n\n please try again.")
+        
+        
 #staff 
 def staff():
     logoPrint()
