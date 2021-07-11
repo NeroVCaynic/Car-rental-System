@@ -117,68 +117,6 @@ def CarModify():
     
     else:
         print('\nWrong input please try again.\n')
-        
-#staff View input statements
-def ViewStaff(value):
-    if value == "1":
-        clear()
-        logo()
-        showCustomer()
-        
-    elif value == "2":
-        clear()
-        logo()
-        showVehicles()
-        
-    elif value == "3":
-        clear()
-        logo()
-        showBills()
-        
-    elif value == "4":
-        clear()
-        logo()
-        showBooking()
-        
-    elif value == "5":
-        clear()
-        logo()
-        CarModify()
-        
-    elif value == "6":
-        clear()
-        logo()
-        BookingReturn()
-    
-    elif value == "7":
-        clear()
-        logo()
-        pass
-    
-    else:
-        print("\nWrong Entry")
-
-#Main Menu
-def MainMenu():
-    logoPrint()
-    print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
-    print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
-
-#CustomerSearch
-    #---------->Are you fucking retarded searching a customer by their full name??? use DL instead. <----------
-    
-def CustomerSearch():
-    name = input("Type your name: ")
-    mycursor.execute("SELECT * FROM customer WHERE FULL_NAME LIKE CONCAT('%', %s, '%')",(name,))
-    result = mycursor.fetchall()
-    count = mycursor.rowcount
-    if count == 1:
-        print(result,"\n")
-    elif count > 1:
-        print("there are more than one Record avaliable")
-    else:
-        print("No Records avaliable")
-    input("press enter to try again")
 
 #booking return function
 def BookingReturn():
@@ -218,6 +156,74 @@ def BookingReturn():
                             
     else:
         print("\n\t ERROR! \n\tCar doesn't exist!\n\n please try again.")
+
+#Generate Billing
+def BillGen():
+    print('d')
+        
+#staff View input statements
+def ViewStaff(value):
+    if value == "1":
+        clear()
+        logo()
+        showCustomer()
+        
+    elif value == "2":
+        clear()
+        logo()
+        showVehicles()
+        
+    elif value == "3":
+        clear()
+        logo()
+        showBills()
+        
+    elif value == "4":
+        clear()
+        logo()
+        showBooking()
+        
+    elif value == "5":
+        clear()
+        logo()
+        CarModify()
+        
+    elif value == "6":
+        clear()
+        logo()
+        BookingReturn()
+    
+    elif value == "7":
+        clear()
+        logo()
+        BillGen()
+    
+    else:
+        print("\nWrong Entry")
+
+#Main Menu
+def MainMenu():
+    logoPrint()
+    print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
+    print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
+
+#CustomerSearch
+    
+    #---------->Are you fucking retarded searching a customer by their full name??? use DL instead. <----------
+    
+def CustomerSearch():
+    name = input("Type your name: ")
+    mycursor.execute("SELECT * FROM customer WHERE FULL_NAME LIKE CONCAT('%', %s, '%')",(name,))
+    result = mycursor.fetchall()
+    count = mycursor.rowcount
+    if count == 1:
+        print(result,"\n")
+    elif count > 1:
+        print("there are more than one Record avaliable")
+    else:
+        print("No Records avaliable")
+    input("press enter to try again")
+
         
         
 #staff 
