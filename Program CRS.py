@@ -149,8 +149,34 @@ def BookingReturn():
             #final amount with late fees which is 10% of rate
             amount=rate*TotDur+(10/100*rate*late)
             mycursor.execute("UPDATE booking_details SET AMOUNT = %s where BOOKING_ID= %s ",(amount, Book,))
-            db.commit()
-            print('\n\t Operation completed successfully!\n')
+            #creates the bill
+            mycursor.execute("select number from serial where category='Bills';")
+            BillID1=mycursor.fetchall()
+            BillID2=BillID1[0]
+            BillID=BillID2[0]
+            mycursor.execute("update serial set number=number+1 where category='Bills';")
+            BillStat='n'
+            mycursor.execute('select insurance from booking_details where booking_id=%s;',(Book,))
+            ins1=mycursor.fetchall()
+            ins2=ins1[0]
+            ins=ins2[0]
+            if ins=='n':
+                mycursor.execute("insert into bills values(%s,%s,%s,%s,%s);",(BillID,returnDate,BillStat,amount,Book,))
+                db.commit()
+                print('\n\t Operation completed successfully!\n')
+                print('Billing ID is ',BillID)
+            
+            else:
+                mycursor.execute('select cost_per_day_in_kwd from insurance where insurance_code=%s;',(ins,))
+                insCost1=mycursor.fetchall()
+                insCost2=insCost1[0]
+                insCost=insCost2[0]
+                AmountWithIns=amount+(insCost*TotDur)
+                mycursor.execute("insert into bills values(%s,%s,%s,%s,%s);",(BillID,returnDate,BillStat,AmountWithIns,Book,))
+                db.commit()
+                print('\n\t Operation completed successfully!\n')
+                print('Billing ID is ',BillID)
+            
         else:
             print('\n\t Something went wrong!\n Please check the return date and try again.\n')
                             
@@ -159,7 +185,9 @@ def BookingReturn():
 
 #Generate Billing
 def BillGen():
-    print('d')
+    Book=input('Enter Booking ID: ')
+    '''print('\n\n░░░░░░░░░░░░░ BILLING INVOICE ░░░░░░░░░░░░░ ')
+    print('⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀ ')'''
         
 #staff View input statements
 def ViewStaff(value):

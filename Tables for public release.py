@@ -23,11 +23,11 @@ mycursor.execute('create table if not exists CAR(REG_NO char(8) not null primary
 db.commit()
 
 #Booking_Details
-mycursor.execute('create table if not exists BOOKING_DETAILS(BOOKING_ID int(5) primary key,FROM_DT date NOT NULL,RET_DT date NOT NULL,AMOUNT double(5,2) NOT NULL,REG_NO char(8) NOT NULL,DL char(15) NOT NULL,MEM_ID int(5) NOT NULL,ACT_RET_DT date NOT NULL,Insurance char(4) not null);')
+mycursor.execute('create table if not exists BOOKING_DETAILS(BOOKING_ID int(5) primary key,FROM_DT date NOT NULL,RET_DT date NOT NULL,AMOUNT double(7,2) NOT NULL,REG_NO char(8) NOT NULL,DL char(15) NOT NULL,MEM_ID int(5) NOT NULL,ACT_RET_DT date NOT NULL,Insurance char(4) not null);')
 db.commit()
 
 #billing_details
-mycursor.execute('create table if not exists BILLS(BILL_ID int(6) primary key,BILL_DATE DATE NOT NULL,BILL_STATUS CHAR(1) NOT NULL,TOTAL_AMOUNT double(5,2) NOT NULL,BOOKING_ID int(5) NOT NULL);')
+mycursor.execute('create table if not exists BILLS(BILL_ID int(6) primary key,BILL_DATE DATE NOT NULL,BILL_STATUS CHAR(1) NOT NULL,TOTAL_AMOUNT double(7,2) NOT NULL,BOOKING_ID int(5) NOT NULL);')
 db.commit()
 
 #car rental insurance
