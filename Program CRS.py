@@ -186,8 +186,92 @@ def BookingReturn():
 #Generate Billing
 def BillGen():
     Book=input('Enter Booking ID: ')
-    '''print('\n\n░░░░░░░░░░░░░ BILLING INVOICE ░░░░░░░░░░░░░ ')
-    print('⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀ ')'''
+    mycursor.execute("select * from bills where booking_id=%s;",(Book,))
+    mycursor.fetchall()
+    count = mycursor.rowcount
+    if count == 1:
+        #required info from bill table 
+        mycursor.execute("select bill_id,bill_date,TOTAL_AMOUNT,bill_status from bills where booking_id=%s;",(Book,))
+        BillInfo1=mycursor.fetchall()
+        BillID2=BillInfo1[0]
+        #BillID
+        BillID=BillID2[0]
+        BillDate2=BillInfo1[0]
+        #Bill date
+        BillDate=BillDate2[1]
+        TotAm2=BillInfo1[0]
+        #total amount
+        TotAm=TotAm2[2]
+        BillStat2=BillInfo1[0]
+        #billing status
+        BillStat=BillStat2[3]
+        #required info from booking_details
+        mycursor.execute('SELECT ACT_RET_DT-FROM_DT from booking_details WHERE BOOKING_ID= %s',(Book,))
+        TotDur1=mycursor.fetchall()
+        TotDur2=TotDur1[0]
+        #Total Duration
+        TotDur=TotDur2[0]
+        mycursor.execute('Select reg_no from booking_details where booking_id= %s',(Book,))
+        regno1=mycursor.fetchall()
+        regno2=regno1[0]
+        #Registration Number
+        regno=regno2[0]
+        mycursor.execute('SELECT ACT_RET_DT-RET_DT from booking_details WHERE BOOKING_ID= %s',(Book,))
+        late1=mycursor.fetchall()
+        #late days
+        late2=late1[0]
+        late=late2[0]
+        mycursor.execute('select insurance from booking_details where booking_id=%s;',(Book,))
+        ins1=mycursor.fetchall()
+        ins2=ins1[0]
+        #insurance
+        ins=ins2[0]
+        mycursor.execute('select model_name from car where reg_no=%s;',(regno,))
+        car1=mycursor.fetchall()
+        car2=car1[0]
+        #car name
+        car=car2[0]
+        mycursor.execute('select DL from booking_details where booking_id=%s;',(Book,))
+        DL1=mycursor.fetchall()
+        DL2=DL1[0]
+        #driving license 
+        DL=DL2[0]
+        #customer table info
+        mycursor.execute('select FULL_NAME,PH_NO,MEM_ID from customer where DL=%s;',(DL,))
+        CusInfo1=mycursor.fetchall()
+        fname2=CusInfo1[0]
+        #fullname
+        fname=fname2[0]
+        pnum2=CusInfo1[0]
+        #phone number
+        pnum=pnum2[1]
+        '''mid2=CusInfo1[0]
+        #mem_id
+        mid=mid2[2]'''
+        clear()
+        print('+----------------------------------------------------+')
+        logo()
+        print('\n\n░░░░░░░░░░░░░░ BILLING INVOICE ░░░░░░░░░░░░░░ ')
+        print('+----------------------------------------------------+')
+        print('\nDate: ',BillDate,'\t\t Invoice no. : ',BillID,'\n\nBill To: ',fname,' ',DL,'\nPhone no.: ',pnum)
+        print('\n Bill:\n+----------------------------------------------------+')
+        print(car,'Reg no.',regno,'\nFor total duration of: ',TotDur,' days.\n',late,' days late.')
+        print('\nInsurance: ',ins)
+        print('+----------------------------------------------------+')
+        print('\t\tTotal Amount:',TotAm)
+        print('+----------------------------------------------------+')
+        print('\n*Note:\n#Vehicle returned after due date will have 10%')
+        print('charged from original cost as *late fees*.\n#Fees once paid cannot be refunded.')
+        print('+----------------------------------------------------+')
+        if BillStat=='n':
+            con=input('\n Is the fees paid? (y/n): ')
+            if con=='y':
+                mycursor.execute("update bills set bill_status='y' where booking_id=%s;",(Book,))
+                db.commit()
+                print('Successfully recorded.')
+                
+    else:
+        print('\n\t Bill not found.\n\t Try again.\n')
         
 #staff View input statements
 def ViewStaff(value):
