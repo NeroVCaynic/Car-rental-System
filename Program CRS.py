@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="root",
+    passwd="sheikkhokon1435",
     database='crs'
     )
 
@@ -319,25 +319,25 @@ def MainMenu():
     print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
     print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
 
-#CustomerSearch
+#book
+def BookOrReserve():
+    mycursor.execute("SELECT REG_NO, MODEL_NAME, MAKE, CAR_CATEGORY, COST_PER_DAY_IN_KWD FROM car WHERE AVAILABILITY LIKE 'y'")
+    result = pd.DataFrame(mycursor.fetchall(), columns=["REG_NO","MODEL_NAME","MAKE","CAR_CATEGORY","COST_PER_DAY_IN_KWD"])
+    print(result)
+    loc = int(input())
+    re = result.iloc[loc]
+    for x in re:
+        print(x, end=' ')
+    print(' ')
+    mycursor.execute("SELECT * FROM insurance;")
+    result2 = pd.DataFrame(mycursor.fetchall(), columns=["INSURANCE_CODE", "INSURANCE_NAME", "COVERAGE_TYPE", "COST_PER_DAY_IN_KWD"])
+    print(result2)
+    loc2 = int(input())
+    re2 = result2.iloc[loc2]
+    for x in re2:
+        print(x, end=' ')
+        print(' ')
     
-    #---------->Are you fucking retarded searching a customer by their full name??? use DL instead. <----------
-    
-def CustomerSearch():
-    name = input("Type your name: ")
-    mycursor.execute("SELECT * FROM customer WHERE FULL_NAME LIKE CONCAT('%', %s, '%')",(name,))
-    result = mycursor.fetchall()
-    count = mycursor.rowcount
-    if count == 1:
-        print(result,"\n")
-    elif count > 1:
-        print("there are more than one Record avaliable")
-    else:
-        print("No Records avaliable")
-    input("press enter to try again")
-
-        
-        
 #staff 
 def staff():
     logoPrint()
@@ -373,7 +373,7 @@ def Main():
         if Num == "0":
             staff()
         elif Num == "1":
-            #CustomerSearch()
+            BookOrReserve()
             pass
         elif Num == "2":
             pass

@@ -4,11 +4,12 @@ import pandas as pd
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="root",
+  passwd="sheikkhokon1435",
+  database='crs'
    )
 
 mycursor = db.cursor()
-
+'''
 mycursor.execute('create database if not exists crs;')
 db.commit()
 
@@ -21,11 +22,11 @@ db.commit()
 #car 
 mycursor.execute('create table if not exists CAR(REG_NO char(8) not null primary key,MODEL_NAME varchar(25) not null,MAKE varchar(15),CAR_CATEGORY varchar(15) not null,AVAILABILITY char(1) not null,COST_PER_DAY_IN_KWD int(3));')
 db.commit()
-
+'''
 #Booking_Details
 mycursor.execute('create table if not exists BOOKING_DETAILS(BOOKING_ID int(5) primary key,FROM_DT date NOT NULL,RET_DT date NOT NULL,AMOUNT double(7,2) NOT NULL,REG_NO char(8) NOT NULL,DL char(15) NOT NULL,MEM_ID int(5) NOT NULL,ACT_RET_DT date NOT NULL,Insurance char(4) not null);')
 db.commit()
-
+'''
 #billing_details
 mycursor.execute('create table if not exists BILLS(BILL_ID int(6) primary key,BILL_DATE DATE NOT NULL,BILL_STATUS CHAR(1) NOT NULL,TOTAL_AMOUNT double(7,2) NOT NULL,BOOKING_ID int(5) NOT NULL);')
 db.commit()
@@ -46,7 +47,7 @@ val = [
   ('260021004572','Ahmad Farhat','+965 55321475','Hawally Tunis St.,KW','04572')
   ]
 
-mycursor.executemany(ins,val)
+mycursor.executemany(ins,val,)
 db.commit()
 
 
@@ -82,16 +83,10 @@ val3 = [
 mycursor.executemany(ins3,val3)
 db.commit()
 
-'''mycursor.execute("select * from car")
-data = mycursor.fetchall()
-print(pd.DataFrame(data,index=None,columns=["DL", "Model Make", "Brand", "type", "Avaliable", "null"]))'''
-
-#new table <-----------------------
-
 #customer table
 mycursor.execute('create table if not exists Serial(Category varchar(15) primary key,number int(5) not null);')
 vals = [('Booking_details',1302),('Bills',1102),('Mem_id',3021)]
 vals2='Insert into serial values(%s,%s);'
 mycursor.executemany(vals2,vals)
 db.commit()
-
+'''
