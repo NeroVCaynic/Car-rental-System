@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="root",
+    passwd="sheikkhokon1435",
     database='crs'
     )
 
@@ -337,11 +337,28 @@ def BookOrReserve():
     result2 = pd.DataFrame(mycursor.fetchall(), columns=["INSURANCE", "COVERAGE_TYPE", "COST_PER_DAY_IN_KWD"])
     print(result2)
     loc2 = int(input('Add an insurance(if not required enter n) : '))
+    logoPrint()
     re2 = result2.iloc[loc2]
     for x in re2:
         print(x, end=' ')
-        print(' ')
-    
+    print(' ')
+    while True:
+        name = input("Enter your FullName: ")
+        address = input("Enter your address: ")
+        DL = input("Enter your Driver's license")
+        print("Enter your phone number with country code")
+        phNo = input(": ")
+        if len(phNo) == 11 :
+            phNo = '+'+phNo
+            print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
+            Endloop = input("If the above info is correct enter y if not press another key and enter\n: ")
+            if Endloop == 'y':
+                break
+            else:
+                continue
+        else:
+            print('wrong number')
+
 #staff 
 def staff():
     logoPrint()
@@ -378,7 +395,6 @@ def Main():
             staff()
         elif Num == "1":
             BookOrReserve()
-            pass
         elif Num == "2":
             pass
         else:
