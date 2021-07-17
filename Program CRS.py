@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
@@ -321,18 +321,22 @@ def MainMenu():
 
 #book
 def BookOrReserve():
-    mycursor.execute("SELECT REG_NO, MODEL_NAME, MAKE, CAR_CATEGORY, COST_PER_DAY_IN_KWD FROM car WHERE AVAILABILITY LIKE 'y'")
-    result = pd.DataFrame(mycursor.fetchall(), columns=["REG_NO","MODEL_NAME","MAKE","CAR_CATEGORY","COST_PER_DAY_IN_KWD"])
+    logoPrint()
+    mycursor.execute("SELECT MAKE,MODEL_NAME,CAR_CATEGORY, COST_PER_DAY_IN_KWD FROM car WHERE AVAILABILITY LIKE 'y'")
+    result = pd.DataFrame(mycursor.fetchall(), columns=["MAKE","MODEL  ","  CATEGORY","COST_PER_DAY_IN_KWD"])
+    print('\nAvailable cars:\n')
     print(result)
-    loc = int(input())
+    loc = int(input('\nSelect a car (0,1,2,3): '))
+    logoPrint()
     re = result.iloc[loc]
+    print('\nYou have chosen: ')
     for x in re:
         print(x, end=' ')
-    print(' ')
-    mycursor.execute("SELECT * FROM insurance;")
-    result2 = pd.DataFrame(mycursor.fetchall(), columns=["INSURANCE_CODE", "INSURANCE_NAME", "COVERAGE_TYPE", "COST_PER_DAY_IN_KWD"])
+    print(' \n')
+    mycursor.execute("SELECT INSURANCE_NAME,COVERAGE_TYPE,COST_PER_DAY_IN_KWD FROM insurance;")
+    result2 = pd.DataFrame(mycursor.fetchall(), columns=["INSURANCE", "COVERAGE_TYPE", "COST_PER_DAY_IN_KWD"])
     print(result2)
-    loc2 = int(input())
+    loc2 = int(input('Add an insurance(if not required enter n) : '))
     re2 = result2.iloc[loc2]
     for x in re2:
         print(x, end=' ')
