@@ -348,14 +348,17 @@ def BookOrReserve():
         DL = input("Enter your Driver's license")
         print("Enter your phone number with country code")
         phNo = input(": ")
-        if len(phNo) == 11 :
-            phNo = '+'+phNo
-            print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
-            Endloop = input("If the above info is correct enter y if not press another key and enter\n: ")
-            if Endloop == 'y':
-                break
+        if len(phNo) == 11:
+            if len(name) >= 7:
+                phNo = '+'+phNo
+                print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
+                Endloop = input("If the above info is correct enter y if not press another key and enter\n: ")
+                if Endloop == 'y':
+                    break
+                else:
+                    continue
             else:
-                continue
+                print('invalid FullName')
         else:
             print('wrong number')
 
