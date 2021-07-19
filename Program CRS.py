@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
@@ -336,16 +336,30 @@ def BookOrReserve():
     mycursor.execute("SELECT INSURANCE_NAME,COVERAGE_TYPE,COST_PER_DAY_IN_KWD FROM insurance;")
     result2 = pd.DataFrame(mycursor.fetchall(), columns=["INSURANCE", "COVERAGE_TYPE", "COST_PER_DAY_IN_KWD"])
     print(result2)
-    loc2 = int(input('Add an insurance(if not required enter n) : '))
+    loc2 = int(input('Add an insurance: '))
     logoPrint()
     re2 = result2.iloc[loc2]
     for x in re2:
         print(x, end=' ')
     print(' ')
     while True:
-        name = input("Enter your FullName: ")
+        DL = input("Enter your Driver's license number:")
+        mycursor.execute('SELECT * FROM CUSTOMER WHERE DL=%s;',(DL,))
+        info=mycursor.fetchall()
+        count = mycursor.rowcount
+        if count==1:
+            cusInfo=pd.DataFrame(info, columns=["DL","FULL NAME", "PHONE NUMBER","ADDRESS","MEM ID"])
+            print(cusInfo)
+            confirm=input('Is the above information correct? [y/n]: ')
+            if confirm=='y':
+                pass
+            else:
+                continue
+        else:
+            continue
+    
+        name = input("Enter your full name: ")
         address = input("Enter your address: ")
-        DL = input("Enter your Driver's license")
         print("Enter your phone number with country code")
         phNo = input(": ")
         if len(phNo) == 11:
