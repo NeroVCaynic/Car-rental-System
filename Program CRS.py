@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="root",
+    passwd="sheikkhokon1435",
     database='crs'
     )
 
@@ -343,38 +343,45 @@ def BookOrReserve():
         print(x, end=' ')
     print(' ')
     while True:
-        DL = input("Enter your Driver's license number:")
-        mycursor.execute('SELECT * FROM CUSTOMER WHERE DL=%s;',(DL,))
-        info=mycursor.fetchall()
-        count = mycursor.rowcount
-        if count==1:
-            cusInfo=pd.DataFrame(info, columns=["DL","FULL NAME", "PHONE NUMBER","ADDRESS","MEM ID"])
-            print(cusInfo)
-            confirm=input('Is the above information correct? [y/n]: ')
-            if confirm=='y':
-                pass
-            else:
-                continue
-        else:
-            continue
-    
+        DL = input("Enter your Driver's license")
         name = input("Enter your full name: ")
         address = input("Enter your address: ")
         print("Enter your phone number with country code")
         phNo = input(": ")
-        if len(phNo) == 11:
-            if len(name) >= 7:
+        takeDD = input("enter take out day(DD): ")
+        takeMM = input("enter take out month(MM): ")
+        takeYYY = input("enter take out year: ")
+        takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
+        returnDD = input("enter return day(DD): ")
+        returnMM = input("enter return month(MM): ")
+        returnYYY = input("enter return year: ")
+        returnDT = returnYYY+"-"+returnMM+"-"+returnDD
+        if len(phNo) >= 11:
+            if len(name) >= 1:
                 phNo = '+'+phNo
-                print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
-                Endloop = input("If the above info is correct enter y if not press another key and enter\n: ")
-                if Endloop == 'y':
-                    break
+                if len(takeDD) == 2 and len(takeMM) == 2:
+                    if len(returnDD) == 2 and len(returnMM) == 2:
+                        print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
+                        Endloop = input("If the above info is correct enter y if not press another key and enter\n: ")
+                        if Endloop == 'y':
+                            break
+                        else:
+                            continue 
+                    else:
+                        print("Invalid return date")
                 else:
-                    continue
+                    print("Invalid take out date")
             else:
-                print('invalid FullName')
+                print('invalid Entry')
         else:
-            print('wrong number')
+            print('invalid phone number')
+    mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,'05564')",(DL,name,phNo,address,))
+    mycursor.execute("SELECT * FROM customer;")
+    print(mycursor.fetchall())
+    make = re.loc["MAKE"]
+    mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MAKE = %s", (make,))
+    mycursor.execute("SELECT * FROM car;")
+    print(mycursor.fetchall())
 
 #staff 
 def staff():

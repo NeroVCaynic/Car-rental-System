@@ -90,3 +90,4 @@ vals2='Insert into serial values(%s,%s);'
 mycursor.executemany(vals2,vals)
 db.commit()
 '''
+
