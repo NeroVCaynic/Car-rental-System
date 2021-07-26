@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
@@ -343,18 +343,22 @@ def BookOrReserve():
         print(x, end=' ')
     print(' ')
     while True:
-        DL = input("Enter your Driver's license")
+        DL = input("Enter your Driver's License: ")
         name = input("Enter your full name: ")
         address = input("Enter your address: ")
         print("Enter your phone number with country code")
         phNo = input(": ")
-        takeDD = input("enter take out day(DD): ")
-        takeMM = input("enter take out month(MM): ")
-        takeYYY = input("enter take out year: ")
+        mycursor.execute("select year(curdate());")
+        CurYear1=mycursor.fetchall()
+        CurYear2=CurYear1[0]
+        CurYear=CurYear2[0]
+        takeDD = input("enter pick up day(DD): ")
+        takeMM = input("enter pick up month(MM): ")
+        takeYYY = CurYear
         takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
         returnDD = input("enter return day(DD): ")
         returnMM = input("enter return month(MM): ")
-        returnYYY = input("enter return year: ")
+        returnYYY = CurYear
         returnDT = returnYYY+"-"+returnMM+"-"+returnDD
         if len(phNo) >= 11:
             if len(name) >= 1:
