@@ -341,51 +341,85 @@ def BookOrReserve():
     re2 = result2.iloc[loc2]
     for x in re2:
         print(x, end=' ')
-    print(' ')
+    print('\n\n')
     while True:
         DL = input("Enter your Driver's License: ")
-        name = input("Enter your full name: ")
-        address = input("Enter your address: ")
-        print("Enter your phone number with country code")
-        phNo = input(": ")
-        mycursor.execute("select year(curdate());")
-        CurYear1=mycursor.fetchall()
-        CurYear2=CurYear1[0]
-        CurYear=CurYear2[0]
-        takeDD = input("enter pick up day(DD): ")
-        takeMM = input("enter pick up month(MM): ")
-        takeYYY = CurYear
-        takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
-        returnDD = input("enter return day(DD): ")
-        returnMM = input("enter return month(MM): ")
-        returnYYY = CurYear
-        returnDT = returnYYY+"-"+returnMM+"-"+returnDD
-        if len(phNo) >= 11:
-            if len(name) >= 1:
-                phNo = '+'+phNo
-                if len(takeDD) == 2 and len(takeMM) == 2:
-                    if len(returnDD) == 2 and len(returnMM) == 2:
-                        print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
-                        Endloop = input("If the above info is correct enter y if not press another key and enter\n: ")
-                        if Endloop == 'y':
-                            break
-                        else:
-                            continue 
-                    else:
-                        print("Invalid return date")
-                else:
-                    print("Invalid take out date")
-            else:
-                print('invalid Entry')
+        mycursor.execute("select DL from customer;")
+        DLchck=mycursor.fetchall()
+        DLcheck=list()
+        for x in DLchck:
+            temp=x[0]
+            DLcheck.append(temp)
+        if DL in DLcheck:
+            mycursor.execute("select * from customer where DL=%s;",(DL,))
+            info=mycursor.fetchall()
+            ExistCus= pd.DataFrame(info,columns=["DL","FULL NAME","PHONE NO","ADDRESS","MEM_ID"])
+            print(ExistCus)
+            confirm=input('\n\n Is the above information correct? y/n : ')
+            if confirm=='y':
+                infoFin=info[0]
+                mycursor.execute("select year(curdate());")
+                CurYear1=mycursor.fetchall()
+                CurYear2=CurYear1[0]
+                CurYear=CurYear2[0]
+                takeDD = input("enter pick up day(DD): ")
+                takeMM = input("enter pick up month(MM): ")
+                takeYYY = CurYear
+                takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
+                returnDD = input("enter return day(DD): ")
+                returnMM = input("enter return month(MM): ")
+                returnYYY = CurYear
+                returnDT = returnYYY+"-"+returnMM+"-"+returnDD
         else:
-            print('invalid phone number')
-    mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,'05564')",(DL,name,phNo,address,))
-    mycursor.execute("SELECT * FROM customer;")
-    print(mycursor.fetchall())
-    make = re.loc["MAKE"]
-    mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MAKE = %s", (make,))
-    mycursor.execute("SELECT * FROM car;")
-    print(mycursor.fetchall())
+            name = input("Enter your Full name: ")
+            address = input("Enter your address: ")
+            print("Enter your phone number with country code")
+            phNo = input(": ")
+            mycursor.execute("select year(curdate());")
+            CurYear1=mycursor.fetchall()
+            CurYear2=CurYear1[0]
+            CurYear=CurYear2[0]
+            takeDD = input("enter pick up day(DD): ")
+            takeMM = input("enter pick up month(MM): ")
+            takeYYY = CurYear
+            takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
+            returnDD = input("enter return day(DD): ")
+            returnMM = input("enter return month(MM): ")
+            returnYYY = CurYear
+            returnDT = returnYYY+"-"+returnMM+"-"+returnDD
+            mycursor.execute("select number from serial where category='Mem_id';")
+            MemID1=mycursor.fetchall()
+            MemID2=MemID1[0]
+            #membership id
+            MemID=MemID2[0]
+            mycursor.execute("update serial set number= number + 1 where category='Mem_id';")
+            db.commit()
+            if len(phNo) >= 11:
+                if len(name) >= 1:
+                    phNo = '+'+phNo
+                    if len(takeDD) == 2 and len(takeMM) == 2:
+                        if len(returnDD) == 2 and len(returnMM) == 2:
+                            print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
+                            Endloop = input("Is the above information correct? y/n:  ")
+                            if Endloop == 'y':
+                                break
+                            else:
+                                continue 
+                        else:
+                            print("Invalid return date")
+                    else:
+                        print("Invalid take out date")
+                else:
+                    print('invalid Entry')
+            else:
+                print('invalid phone number')
+        mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
+        mycursor.execute("SELECT * FROM customer;")
+        print(mycursor.fetchall())
+        make = re.loc["MAKE"]
+        mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MAKE = %s", (make,))
+        mycursor.execute("SELECT * FROM car;")
+        print(mycursor.fetchall())
 
 #staff 
 def staff():
