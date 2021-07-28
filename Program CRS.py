@@ -344,13 +344,10 @@ def BookOrReserve():
     print('\n\n')
     while True:
         DL = input("Enter your Driver's License: ")
-        mycursor.execute("select DL from customer;")
-        DLchck=mycursor.fetchall()
-        DLcheck=list()
-        for x in DLchck:
-            temp=x[0]
-            DLcheck.append(temp)
-        if DL in DLcheck:
+        mycursor.execute("select * from customer where DL=%s;",(DL,))
+        mycursor.fetchall()
+        count = mycursor.rowcount
+        if count >= 1:
             mycursor.execute("select * from customer where DL=%s;",(DL,))
             info=mycursor.fetchall()
             ExistCus= pd.DataFrame(info,columns=["DL","FULL NAME","PHONE NO","ADDRESS","MEM_ID"])
@@ -378,9 +375,7 @@ def BookOrReserve():
                 BookID2=BookID1[0]
                 #membership id
                 BookID=BookID2[0]
-                MEMID1=ExistCus.iloc[4]
-                MEMID=MEMID1[1]
-                print(MEMID)
+                MEMID=ExistCus.loc[0,"MEM_ID"]
                 insurance=re2
                 reg = re.loc["REGNO"]
                 mycursor.execute("update serial set number= number + 1 where category='booking_details';")
