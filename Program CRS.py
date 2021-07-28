@@ -322,8 +322,8 @@ def MainMenu():
 #book
 def BookOrReserve():
     logoPrint()
-    mycursor.execute("SELECT MAKE,MODEL_NAME,CAR_CATEGORY, COST_PER_DAY_IN_KWD FROM car WHERE AVAILABILITY LIKE 'y'")
-    result = pd.DataFrame(mycursor.fetchall(), columns=["MAKE","MODEL","CATEGORY","COST_PER_DAY_IN_KWD"])
+    mycursor.execute("SELECT reg_no,MAKE,MODEL_NAME,CAR_CATEGORY, COST_PER_DAY_IN_KWD FROM car WHERE AVAILABILITY LIKE 'y'")
+    result = pd.DataFrame(mycursor.fetchall(), columns=["REGNO","MAKE","MODEL   ","   CATEGORY","COST_PER_DAY_IN_KWD"])
     print('\nAvailable cars:\n')
     print(result)
     loc = int(input('\nSelect a car (0,1,2,3): '))
@@ -370,6 +370,22 @@ def BookOrReserve():
                 returnMM = input("enter return month(MM): ")
                 returnYYY = str(CurYear)
                 returnDT = returnYYY + "-" + returnMM+ "-" + returnDD
+                reg = re.loc["REGNO"]
+                mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
+                #booking_id
+                mycursor.execute("select number from serial where category='booking_details';")
+                BookID1=mycursor.fetchall()
+                BookID2=BookID1[0]
+                #membership id
+                BookID=BookID2[0]
+                MEMID1=ExistCus.iloc[4]
+                MEMID=MEMID1[1]
+                print(MEMID)
+                insurance=re2
+                reg = re.loc["REGNO"]
+                mycursor.execute("update serial set number= number + 1 where category='booking_details';")
+                mycursor.execute("insert into booking_details (booking_id,from_dt,ret_dt,reg_no,dl,mem_id,insurance) VALUES (%s,%s,%s,%s,%s,%s,%s)",(BookID,takeinDT,returnDT,reg,DL,MEMID,insurance,))
+                
         else:
             name = input("Enter your Full name: ")
             address = input("Enter your address: ")
@@ -405,11 +421,10 @@ def BookOrReserve():
                                 mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
                                 mycursor.execute("SELECT * FROM customer;")
                                 print(mycursor.fetchall())
-                                model = re.loc["MODEL"]
-                                mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MODEL = %s", (model,))
+                                reg = re.loc["REGNO"]
+                                mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
                                 mycursor.execute("SELECT * FROM car;")
-                                print(mycursor.fetchall())
-                                db.commit()  
+                                
                             else:
                                 continue 
                         else:
@@ -420,14 +435,15 @@ def BookOrReserve():
                     print('invalid Entry')
             else:
                 print('invalid phone number')
-        mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
+                continue
+            #didnt finish dis keep it as it is
+        '''mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
         mycursor.execute("SELECT * FROM customer;")
         print(mycursor.fetchall())
-        model = re.loc["MODEL"]
-        mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MODEL = %s", (model,))
+        reg = re.loc["REGNO"]
+        mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
         mycursor.execute("SELECT * FROM car;")
-        print(mycursor.fetchall())
-        db.commit()
+        '''
 
 #staff 
 def staff():
