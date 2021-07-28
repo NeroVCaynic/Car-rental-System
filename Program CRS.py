@@ -323,7 +323,7 @@ def MainMenu():
 def BookOrReserve():
     logoPrint()
     mycursor.execute("SELECT MAKE,MODEL_NAME,CAR_CATEGORY, COST_PER_DAY_IN_KWD FROM car WHERE AVAILABILITY LIKE 'y'")
-    result = pd.DataFrame(mycursor.fetchall(), columns=["MAKE","MODEL  ","  CATEGORY","COST_PER_DAY_IN_KWD"])
+    result = pd.DataFrame(mycursor.fetchall(), columns=["MAKE","MODEL","CATEGORY","COST_PER_DAY_IN_KWD"])
     print('\nAvailable cars:\n')
     print(result)
     loc = int(input('\nSelect a car (0,1,2,3): '))
@@ -364,12 +364,12 @@ def BookOrReserve():
                 CurYear=CurYear2[0]
                 takeDD = input("enter pick up day(DD): ")
                 takeMM = input("enter pick up month(MM): ")
-                takeYYY = CurYear
+                takeYYY = str(CurYear)
                 takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
                 returnDD = input("enter return day(DD): ")
                 returnMM = input("enter return month(MM): ")
-                returnYYY = CurYear
-                returnDT = returnYYY+"-"+returnMM+"-"+returnDD
+                returnYYY = str(CurYear)
+                returnDT = returnYYY + "-" + returnMM+ "-" + returnDD
         else:
             name = input("Enter your Full name: ")
             address = input("Enter your address: ")
@@ -381,11 +381,11 @@ def BookOrReserve():
             CurYear=CurYear2[0]
             takeDD = input("enter pick up day(DD): ")
             takeMM = input("enter pick up month(MM): ")
-            takeYYY = CurYear
+            takeYYY = str(CurYear)
             takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
             returnDD = input("enter return day(DD): ")
             returnMM = input("enter return month(MM): ")
-            returnYYY = CurYear
+            returnYYY = str(CurYear)
             returnDT = returnYYY+"-"+returnMM+"-"+returnDD
             mycursor.execute("select number from serial where category='Mem_id';")
             MemID1=mycursor.fetchall()
@@ -399,10 +399,17 @@ def BookOrReserve():
                     phNo = '+'+phNo
                     if len(takeDD) == 2 and len(takeMM) == 2:
                         if len(returnDD) == 2 and len(returnMM) == 2:
-                            print("\nDriver's license: ",DL,"\nFullName: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
+                            print("\nDriver's license: ",DL,"\nFull Name: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
                             Endloop = input("Is the above information correct? y/n:  ")
                             if Endloop == 'y':
-                                break
+                                mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
+                                mycursor.execute("SELECT * FROM customer;")
+                                print(mycursor.fetchall())
+                                model = re.loc["MODEL"]
+                                mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MODEL = %s", (model,))
+                                mycursor.execute("SELECT * FROM car;")
+                                print(mycursor.fetchall())
+                                db.commit()  
                             else:
                                 continue 
                         else:
@@ -416,10 +423,11 @@ def BookOrReserve():
         mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
         mycursor.execute("SELECT * FROM customer;")
         print(mycursor.fetchall())
-        make = re.loc["MAKE"]
-        mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MAKE = %s", (make,))
+        model = re.loc["MODEL"]
+        mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE MODEL = %s", (model,))
         mycursor.execute("SELECT * FROM car;")
         print(mycursor.fetchall())
+        db.commit()
 
 #staff 
 def staff():
