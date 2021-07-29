@@ -16,7 +16,7 @@ db = sql.connect(
 mycursor = db.cursor()
 
 
-#function creations
+#function creationss
 
 #creates empty space
 def clear():    
