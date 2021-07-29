@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
@@ -319,124 +319,8 @@ def MainMenu():
     print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
     print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
 
-#book
-def BookOrReserve():
-    logoPrint()
-    mycursor.execute("SELECT reg_no,MAKE,MODEL_NAME,CAR_CATEGORY, COST_PER_DAY_IN_KWD FROM car WHERE AVAILABILITY LIKE 'y'")
-    result = pd.DataFrame(mycursor.fetchall(), columns=["REGNO","MAKE","MODEL   ","   CATEGORY","COST_PER_DAY_IN_KWD"])
-    print('\nAvailable cars:\n')
-    print(result)
-    loc = int(input('\nSelect a car (0,1,2,3): '))
-    logoPrint()
-    re = result.iloc[loc]
-    print('\nYou have chosen: ')
-    for x in re:
-        print(x, end=' ')
-    print(' \n')
-    mycursor.execute("SELECT INSURANCE_NAME,COVERAGE_TYPE,COST_PER_DAY_IN_KWD FROM insurance;")
-    result2 = pd.DataFrame(mycursor.fetchall(), columns=["INSURANCE", "COVERAGE_TYPE", "COST_PER_DAY_IN_KWD"])
-    print(result2)
-    loc2 = int(input('Add an insurance: '))
-    logoPrint()
-    re2 = result2.iloc[loc2]
-    for x in re2:
-        print(x, end=' ')
-    print('\n\n')
-    while True:
-        DL = input("Enter your Driver's License: ")
-        mycursor.execute("select * from customer where DL = %s;",(DL,))
-        mycursor.fetchall()
-        count = mycursor.rowcount
-        if count >= 1:
-            mycursor.execute("select * from customer where DL = %s;",(DL,))
-            info=mycursor.fetchall()
-            ExistCus= pd.DataFrame(info,columns=["DL","FULL NAME","PHONE NO","ADDRESS","MEM_ID"])
-            print(ExistCus)
-            confirm=input('\n\n Is the above information correct? y/n : ')
-            if confirm=='y':
-                infoFin=info[0]
-                mycursor.execute("select year(curdate());")
-                CurYear=mycursor.fetchall()
-                takeDD = input("enter pick up day(DD): ")
-                takeMM = input("enter pick up month(MM): ")
-                takeYYY = str(CurYear)
-                takeinDT = takeYYY,"-",takeMM,"-",takeDD
-                returnDD = input("enter return day(DD): ")
-                returnMM = input("enter return month(MM): ")
-                returnYYY = (CurYear)
-                returnDT = returnYYY,"-",returnMM,"-",returnDD
-                reg = re.loc["REGNO"]
-                mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
-                #booking_id
-                mycursor.execute("select number from serial where category='booking_details';")
-                BookID=mycursor.fetchall()
-                #membership id
-                MEMID=ExistCus.loc[0,"MEM_ID"]
-                insurance=re2
-                reg = re.loc["REGNO"]
-                mycursor.execute("update serial set number= number + 1 where category='booking_details';")
-                mycursor.execute("insert into booking_details (reg_no,dl,insurance) VALUES (%s,%s,%s)",(reg,DL,insurance,))
 
-        else:
-            name = input("Enter your Full name: ")
-            address = input("Enter your address: ")
-            print("Enter your phone number with country code")
-            phNo = input(": ")
-            mycursor.execute("select year(curdate());")
-            CurYear1=mycursor.fetchall()
-            CurYear2=CurYear1[0]
-            CurYear=CurYear2[0]
-            takeDD = input("enter pick up day(DD): ")
-            takeMM = input("enter pick up month(MM): ")
-            takeYYY = str(CurYear)
-            takeinDT = takeYYY,"-",takeMM,"-",takeDD
-            returnDD = input("enter return day(DD): ")
-            returnMM = input("enter return month(MM): ")
-            returnYYY = str(CurYear)
-            returnDT = returnYYY,"-",returnMM,"-",returnDD
-            mycursor.execute("select number from serial where category='Mem_id';")
-            MemID1=mycursor.fetchall()
-            MemID2=MemID1[0]
-            #membership id
-            MemID=MemID2[0]
-            mycursor.execute("update serial set number= number + 1 where category='Mem_id';")
-            #db.commit()
-            if len(phNo) >= 11:
-                if len(name) >= 1:
-                    phNo = '+'+phNo
-                    if len(takeDD) == 2 and len(takeMM) == 2:
-                        if len(returnDD) == 2 and len(returnMM) == 2:
-                            print("\nDriver's license: ",DL,"\nFull Name: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
-                            Endloop = input("Is the above information correct? y/n:  ")
-                            if Endloop == 'y':
-                                mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
-                                mycursor.execute("SELECT * FROM customer;")
-                                print(mycursor.fetchall())
-                                reg = re.loc["REGNO"]
-                                mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
-                                mycursor.execute("SELECT * FROM car;")
-                                
-                            else:
-                                continue 
-                        else:
-                            print("Invalid return date")
-                    else:
-                        print("Invalid take out date")
-                else:
-                    print('invalid Entry')
-            else:
-                print('invalid phone number')
-                continue
-            #didnt finish dis keep it as it is
-        '''mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MemID,))
-        mycursor.execute("SELECT * FROM customer;")
-        print(mycursor.fetchall())
-        reg = re.loc["REGNO"]
-        mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
-        mycursor.execute("SELECT * FROM car;")
-        '''
-
-#staff 
+ #staff 
 def staff():
     logoPrint()
     print('\n\n\n\n\n      STAFF LOGIN\n\nEnter staff credentials:')
