@@ -376,7 +376,6 @@ def BookOrReserve():
                 reg = re.loc["REGNO"]
                 mycursor.execute("update serial set number= number + 1 where category='booking_details';")
                 mycursor.execute("insert into booking_details (reg_no,dl,insurance) VALUES (%s,%s,%s)",(reg,DL,insurance,))
-
         else:
             name = input("Enter your Full name: ")
             address = input("Enter your address: ")
