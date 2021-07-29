@@ -4,11 +4,12 @@ import pandas as pd
 db = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="root",
+  passwd="sheikkhokon1435",
+  database='crs'
    )
 
 mycursor = db.cursor()
-
+'''
 mycursor.execute('create database if not exists crs;')
 db.commit()
 
@@ -89,5 +90,9 @@ vals = [('Booking_details',1302),('Bills',1102),('Mem_id',3021)]
 vals2='Insert into serial values(%s,%s);'
 mycursor.executemany(vals2,vals)
 db.commit()
-
+'''
+mycursor.execute("select number from serial where category='booking_details';")
+BookID1=pd.DataFrame(mycursor.fetchall(), columns=["MEM_ID"])
+print(BookID1.loc[0,"MEM_ID"])
+#ExistCus.loc["MEM_ID"]
 

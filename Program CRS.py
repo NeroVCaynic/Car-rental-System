@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="root",
+    passwd="sheikkhokon1435",
     database='crs'
     )
 
@@ -344,11 +344,11 @@ def BookOrReserve():
     print('\n\n')
     while True:
         DL = input("Enter your Driver's License: ")
-        mycursor.execute("select * from customer where DL=%s;",(DL,))
+        mycursor.execute("select * from customer where DL = %s;",(DL,))
         mycursor.fetchall()
         count = mycursor.rowcount
         if count >= 1:
-            mycursor.execute("select * from customer where DL=%s;",(DL,))
+            mycursor.execute("select * from customer where DL = %s;",(DL,))
             info=mycursor.fetchall()
             ExistCus= pd.DataFrame(info,columns=["DL","FULL NAME","PHONE NO","ADDRESS","MEM_ID"])
             print(ExistCus)
@@ -356,31 +356,27 @@ def BookOrReserve():
             if confirm=='y':
                 infoFin=info[0]
                 mycursor.execute("select year(curdate());")
-                CurYear1=mycursor.fetchall()
-                CurYear2=CurYear1[0]
-                CurYear=CurYear2[0]
+                CurYear=mycursor.fetchall()
                 takeDD = input("enter pick up day(DD): ")
                 takeMM = input("enter pick up month(MM): ")
                 takeYYY = str(CurYear)
-                takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
+                takeinDT = takeYYY,"-",takeMM,"-",takeDD
                 returnDD = input("enter return day(DD): ")
                 returnMM = input("enter return month(MM): ")
-                returnYYY = str(CurYear)
-                returnDT = returnYYY + "-" + returnMM+ "-" + returnDD
+                returnYYY = (CurYear)
+                returnDT = returnYYY,"-",returnMM,"-",returnDD
                 reg = re.loc["REGNO"]
                 mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
                 #booking_id
                 mycursor.execute("select number from serial where category='booking_details';")
-                BookID1=mycursor.fetchall()
-                BookID2=BookID1[0]
+                BookID=mycursor.fetchall()
                 #membership id
-                BookID=BookID2[0]
                 MEMID=ExistCus.loc[0,"MEM_ID"]
                 insurance=re2
                 reg = re.loc["REGNO"]
                 mycursor.execute("update serial set number= number + 1 where category='booking_details';")
-                mycursor.execute("insert into booking_details (booking_id,from_dt,ret_dt,reg_no,dl,mem_id,insurance) VALUES (%s,%s,%s,%s,%s,%s,%s)",(BookID,takeinDT,returnDT,reg,DL,MEMID,insurance,))
-                
+                mycursor.execute("insert into booking_details (reg_no,dl,insurance) VALUES (%s,%s,%s)",(reg,DL,insurance,))
+
         else:
             name = input("Enter your Full name: ")
             address = input("Enter your address: ")
@@ -393,18 +389,18 @@ def BookOrReserve():
             takeDD = input("enter pick up day(DD): ")
             takeMM = input("enter pick up month(MM): ")
             takeYYY = str(CurYear)
-            takeinDT = takeYYY+"-"+takeMM+"-"+takeDD
+            takeinDT = takeYYY,"-",takeMM,"-",takeDD
             returnDD = input("enter return day(DD): ")
             returnMM = input("enter return month(MM): ")
             returnYYY = str(CurYear)
-            returnDT = returnYYY+"-"+returnMM+"-"+returnDD
+            returnDT = returnYYY,"-",returnMM,"-",returnDD
             mycursor.execute("select number from serial where category='Mem_id';")
             MemID1=mycursor.fetchall()
             MemID2=MemID1[0]
             #membership id
             MemID=MemID2[0]
             mycursor.execute("update serial set number= number + 1 where category='Mem_id';")
-            db.commit()
+            #db.commit()
             if len(phNo) >= 11:
                 if len(name) >= 1:
                     phNo = '+'+phNo
