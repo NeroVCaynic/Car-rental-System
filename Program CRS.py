@@ -423,7 +423,7 @@ def BookOrReserve():
                         val=[BookID,takeinDT,returnDT,amount,reg,DL,MEMID,returnDT,insurance]
                         mycursor.execute(ins,val)
                         db.commit()
-                        print('\n Car reserved!\n Please provide your credentials at the time of pick up to the staff to confirm your booking.')
+                        print('\n Car reserved!\n Your BookinID is :' ,BookID,' Please provide your credentials at the time of pick up to the staff to confirm your booking.')
                         print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
                         print(' Press any key to back to the main menu')
                         input()
@@ -436,6 +436,39 @@ def BookOrReserve():
             else:
                 print('invalid phone number')
                 continue
+
+#cancel reservation
+def CancelReserve():
+    logoPrint()
+    print('\n\n\n\n')
+    BookID=int(input('Please enter your Booking ID: '))
+    mycursor.execute('select * from booking_details where booking_id=%s',(BookID,))
+    result=mycursor.fetchall()
+    count = mycursor.rowcount
+    if count >= 1:
+        print(result)
+        confirm=input('\nAre you sure you want to cancel the reservation? [y/n] : ')
+        if confirm=='y':
+            mycursor.execute('select reg_no from booking_details where booking_id=%s',(BookID,))
+            reg2=mycursor.fetchall()
+            reg1=reg2[0]
+            reg=reg1[0]
+            mycursor.execute('delete from booking_details where booking_id=%s',(BookID,))
+            mycursor.execute("update car set availability='y' where reg_no=%s",(reg,))
+            db.commit()
+            print('\nReservation cancelled successfully.')
+            print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
+            print(' Press enter to go back to the main menu')
+            input()
+        else:
+            print('\nThe reservation was not cancelled.')
+            print('Press enter to go back to the main menu')
+            input()         
+    else:
+        print('\n Reservation doesnt exist!.\nPlease verify the booking id and try again.')
+        print('Press enter to go back to the main menu')
+        input()
+    
             
  #staff 
 def staff():
@@ -474,7 +507,7 @@ def Main():
         elif Num == "1":
             BookOrReserve()
         elif Num == "2":
-            pass
+            CancelReserve()
         else:
             print("\t ERROR! \n\tWRONG ENTRY\n\n press enter to try again")
             input()
