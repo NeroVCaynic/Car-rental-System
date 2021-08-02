@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="root",
+    passwd="sheikkhokon1435",
     database='crs'
     )
 
@@ -366,35 +366,57 @@ def BookOrReserve():
             confirm=input('\n\n Is the above information correct? y/n : ')
             if confirm=='y':
                 infoFin=info[0]
-                takeinDT = input('Enter pick-up date (YYYY-MM-DD): ')
-                returnDT = input('Enter drop off date (YYYY-MM-DD): ')
-                reg = re.loc["REGNO"]
-                mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
-                #booking_id
-                mycursor.execute("select number from serial where category='booking_details';")
-                BookID1=mycursor.fetchall()
-                BookID2=BookID1[0]
-                BookID=BookID2[0]
-                #membership id
-                MEMID=ExistCus.loc[0,"MEM_ID"]
-                amount=0
-                mycursor.execute("update serial set number= number + 1 where category='booking_details';")
-                ins="insert into booking_details (BOOKING_ID,FROM_DT,RET_DT,AMOUNT,REG_NO,DL,MEM_ID,ACT_RET_DT,insurance)VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-                val=[BookID,takeinDT,returnDT,amount,reg,DL,MEMID,returnDT,insurance]
-                mycursor.execute(ins,val)
-                db.commit()
-                print('\n Car reserved!\n Please provide your credentials at the time of pick up to the staff to confirm your booking.')
-                print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
-                print(' Press any key to back to the main menu')
-                input()
-                run=False
+                taDD = input('Enter pick-up date (DD): ')
+                taMM = input('Enter pick-up date (MM): ')
+                taYYY = input('Enter pick-up date (YYYY): ')
+                takeinDT = taYYY+"-"+taMM+"-"+taDD
+                reDD = input('Enter drop off date (DD): ')
+                reMM = input('Enter drop off date (MM): ')
+                reYYY = input('Enter drop off date (YYYY): ')
+                returnDT = reYYY+"-"+reMM+"-"+reDD
+                if len(taDD) == 2 and len(taMM) == 2 and len(taYYY) == 4:
+                    if len(reDD) == 2 and len(reMM) == 2 and len(reYYY) == 4:
+                        if reYYY == taYYY:
+                            reg = re.loc["REGNO"]
+                            mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
+                            #booking_id
+                            mycursor.execute("select number from serial where category='booking_details';")
+                            BookID1=mycursor.fetchall()
+                            BookID2=BookID1[0]
+                            BookID=BookID2[0]
+                            #membership id
+                            MEMID=ExistCus.loc[0,"MEM_ID"]
+                            amount=0
+                            mycursor.execute("update serial set number= number + 1 where category='booking_details';")
+                            ins="insert into booking_details (BOOKING_ID,FROM_DT,RET_DT,AMOUNT,REG_NO,DL,MEM_ID,ACT_RET_DT,insurance)VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+                            val=[BookID,takeinDT,returnDT,amount,reg,DL,MEMID,returnDT,insurance]
+                            mycursor.execute(ins,val)
+                            db.commit()
+                            print('\n Car reserved!\n Please provide your credentials at the time of pick up to the staff to confirm your booking.')
+                            print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
+                            print(' Press any key to back to the main menu')
+                            input()
+                            run=False
+                        else:
+                            print("rental date must not exceed a year")
+                    else:
+                        print("Date must in the form of DD-MM-YYY(00-00-000)")
+                else:
+                    print("Date must in the form of DD-MM-YYY(00-00-000)")
+                        
         else:
             name = input("Enter your Full name: ")
             address = input("Enter your address: ")
             print("Enter your phone number with country code")
             phNo = input(": ")
-            takeinDT = input('Enter pick-up date (YYYY-MM-DD): ')
-            returnDT = input('Enter drop off date (YYYY-MM-DD): ')
+            taDD = input('Enter pick-up date (DD): ')
+            taMM = input('Enter pick-up date (MM): ')
+            taYYY = input('Enter pick-up date (YYYY): ')
+            takeinDT = taYYY+"-"+taMM+"-"+taDD
+            reDD = input('Enter drop off date (DD): ')
+            reMM = input('Enter drop off date (MM): ')
+            reYYY = input('Enter drop off date (YYYY): ')
+            returnDT = reYYY+"-"+reMM+"-"+reDD
             #mem_id
             mycursor.execute("select number from serial where category='Mem_id';")
             MemID1=mycursor.fetchall()
@@ -413,24 +435,34 @@ def BookOrReserve():
             if len(phNo) >= 11:
                 if len(name) >= 1:
                     phNo = '+'+phNo
-                    print("\nDriver's license: ",DL,"\nFull Name: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
-                    Endloop = input("Is the above information correct? y/n:  ")
-                    if Endloop == 'y':
-                        mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MEMID,))
-                        reg = re.loc["REGNO"]
-                        mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
-                        ins="insert into booking_details (BOOKING_ID,FROM_DT,RET_DT,AMOUNT,REG_NO,DL,MEM_ID,ACT_RET_DT,insurance)VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-                        val=[BookID,takeinDT,returnDT,amount,reg,DL,MEMID,returnDT,insurance]
-                        mycursor.execute(ins,val)
-                        db.commit()
-                        print('\n Car reserved!\n Your BookinID is :' ,BookID,' Please provide your credentials at the time of pick up to the staff to confirm your booking.')
-                        print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
-                        print(' Press any key to back to the main menu')
-                        input()
-                        run=False        
+                    if len(taDD) == 2 and len(taMM) == 2 and len(taYYY) == 4:
+                        if len(reDD) == 2 and len(reMM) == 2 and len(reYYY) == 4:
+                            if reYYY == taYYY:
+                                print("\nDriver's license: ",DL,"\nFull Name: ",name,"\nPhone Number: ",phNo,"\nAddress: ",address)
+                                Endloop = input("Is the above information correct? y/n:  ")
+                                if Endloop == 'y':
+                                    mycursor.execute("INSERT INTO customer (DL, FULL_NAME, PH_NO, ADDRESS, MEM_ID) VALUES (%s,%s,%s,%s,%s)",(DL,name,phNo,address,MEMID,))
+                                    reg = re.loc["REGNO"]
+                                    mycursor.execute("UPDATE car SET AVAILABILITY = 'n' WHERE REG_NO = %s", (reg,))
+                                    ins="insert into booking_details (BOOKING_ID,FROM_DT,RET_DT,AMOUNT,REG_NO,DL,MEM_ID,ACT_RET_DT,insurance)VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+                                    val=[BookID,takeinDT,returnDT,amount,reg,DL,MEMID,returnDT,insurance]
+                                    mycursor.execute(ins,val)
+                                    db.commit()
+                                    print('\n Car reserved!\n Your BookinID is :' ,BookID,' Please provide your credentials at the time of pick up to the staff to confirm your booking.')
+                                    print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
+                                    print(' Press any key to back to the main menu')
+                                    input()
+                                    run=False        
                         
+                                else:
+                                    continue
+                            else:
+                                print("rental date must not exceed a year")
+                        else:
+                            print("Date must in the form of DD-MM-YYY(00-00-000)")
                     else:
-                        continue 
+                        print("Date must in the form of DD-MM-YYY(00-00-000)")
+                            
                 else:
                     print('invalid Entry')
             else:
