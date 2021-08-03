@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
@@ -394,7 +394,7 @@ def BookOrReserve():
                             db.commit()
                             print('\n Car reserved!\n Please provide your credentials at the time of pick up to the staff to confirm your booking.')
                             print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
-                            print(' Press any key to back to the main menu')
+                            print(' Press enter to go back to the main menu')
                             input()
                             run=False
                         else:
@@ -450,7 +450,7 @@ def BookOrReserve():
                                     db.commit()
                                     print('\n Car reserved!\n Your BookinID is :' ,BookID,' Please provide your credentials at the time of pick up to the staff to confirm your booking.')
                                     print('\n Thank you for choosing Park Lane car rental agency.\n Have a good day!')
-                                    print(' Press any key to back to the main menu')
+                                    print(' Press enter to go back to the main menu')
                                     input()
                                     run=False        
                         
@@ -459,9 +459,9 @@ def BookOrReserve():
                             else:
                                 print("rental date must not exceed a year")
                         else:
-                            print("Date must in the form of DD-MM-YYY(00-00-000)")
+                            print("Date must in the form of DD-MM-YYY(00-00-0000)")
                     else:
-                        print("Date must in the form of DD-MM-YYY(00-00-000)")
+                        print("Date must in the form of DD-MM-YYY(00-00-0000)")
                             
                 else:
                     print('invalid Entry')
