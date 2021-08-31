@@ -36,12 +36,17 @@ def logoPrint():
     clear()
     logo()
 
+#Main Menu
+def MainMenu():
+    logoPrint()
+    print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
+    print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
+
 #dataframe function
 def df(data, col):
     result = pd.DataFrame(data, columns=col)
     results = result.to_string(index=False)
     print(results)
-
 
 #visual functions
 
@@ -272,52 +277,6 @@ def BillGen():
                 
     else:
         print('\n\t Bill not found.\n\t Try again.\n')
-        
-#staff View input statements
-def ViewStaff(value):
-    if value == "1":
-        clear()
-        logo()
-        showCustomer()
-        
-    elif value == "2":
-        clear()
-        logo()
-        showVehicles()
-        
-    elif value == "3":
-        clear()
-        logo()
-        showBills()
-        
-    elif value == "4":
-        clear()
-        logo()
-        showBooking()
-        
-    elif value == "5":
-        clear()
-        logo()
-        CarModify()
-        
-    elif value == "6":
-        clear()
-        logo()
-        BookingReturn()
-    
-    elif value == "7":
-        clear()
-        logo()
-        BillGen()
-    
-    else:
-        print("\nWrong Entry")
-
-#Main Menu
-def MainMenu():
-    logoPrint()
-    print('\n Welcome to Park Lane Car Rental Company!\n\nPlease choose your option below:')
-    print('\n\t1. Book or Reserve a car\n\t2. Cancel a reservation\n\n\n0. Staff Login\n')
 
 #book
 def BookOrReserve():
@@ -501,7 +460,46 @@ def CancelReserve():
         print('Press enter to go back to the main menu')
         input()
     
-            
+#staff View input statements
+def ViewStaff(value):
+    if value == "1":
+        clear()
+        logo()
+        showCustomer()
+        
+    elif value == "2":
+        clear()
+        logo()
+        showVehicles()
+        
+    elif value == "3":
+        clear()
+        logo()
+        showBills()
+        
+    elif value == "4":
+        clear()
+        logo()
+        showBooking()
+        
+    elif value == "5":
+        clear()
+        logo()
+        CarModify()
+        
+    elif value == "6":
+        clear()
+        logo()
+        BookingReturn()
+    
+    elif value == "7":
+        clear()
+        logo()
+        BillGen()
+    
+    else:
+        print("\nWrong Entry")
+
  #staff 
 def staff():
     logoPrint()
@@ -530,20 +528,15 @@ def staff():
         input()
 
 #Main Loop
-def Main():
-    while True:
-        MainMenu()
-        Num = input(": ")
-        if Num == "0":
-            staff()
-        elif Num == "1":
-            BookOrReserve()
-        elif Num == "2":
-            CancelReserve()
-        else:
-            print("\t ERROR! \n\tWRONG ENTRY\n\n press enter to try again")
-            input()
-
-
-#Main
-Main()
+while True:
+    MainMenu()
+    Num = input(": ")
+    if Num == "0":
+        staff()
+    elif Num == "1":
+        BookOrReserve()
+    elif Num == "2":
+        CancelReserve()
+    else:
+        print("\t ERROR! \n\tWRONG ENTRY\n\n press enter to try again")
+        input()
