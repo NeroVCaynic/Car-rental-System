@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
@@ -76,7 +76,7 @@ def showBills():
 def showBooking():
     mycursor.execute("SELECT * FROM booking_details;")
     data = mycursor.fetchall()
-    head = ["BOOKING ID", "FROM DT", "RET. DT", "AMOUNT", "REG. NO", "Driver's license", "MEM_ID", "ACT_RET_DT"]
+    head = ["BOOKING ID", "FROM DT", "RET. DT", "AMOUNT", "REG. NO", "Driver's license", "MEM_ID", "ACT_RET_DT","Insurance"]
     df(data,head)
 
 #Add/Delete a car
@@ -515,7 +515,7 @@ def staff():
                     "\n4. View Booking Details\n5. Add/Delete a vehicle to/from the fleet \n\n6. Register returned car\n7. Generate Billing invoice" )
                 value = input('\n Enter choice: ')
                 ViewStaff(value)
-                Continue = input('\nPress y to return back to menu or press any key to log out:  ')
+                Continue = input('\nPress y to return back to menu or press Enter to log out:  ')
                 if Continue == 'y':
                     continue
                 else:
