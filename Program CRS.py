@@ -71,7 +71,7 @@ def showBills():
 def showBooking():
     mycursor.execute("SELECT * FROM booking_details;")
     data = mycursor.fetchall()
-    head = ["BOOKING ID", "FROM DT", "RET. DT", "AMOUNT", "REG. NO", "Driver's license", "MEM_ID", "ACT_RET_DT"]
+    head = ["BOOKING ID", "FROM DT", "RET. DT", "AMOUNT", "REG. NO", "Driver's license", "MEM_ID", "ACT_RET_DT","Insurance"]
     df(data,head)
 
 #Add/Delete a car
