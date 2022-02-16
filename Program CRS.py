@@ -9,7 +9,7 @@ import pandas as pd
 db = sql.connect(
     host="localhost",
     user="root",
-    passwd="sheikkhokon1435",
+    passwd="root",
     database='crs'
     )
 
